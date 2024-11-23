@@ -1,0 +1,52 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <deque>
+#include <stack>
+using namespace std;
+
+
+int main() {
+
+    int n =0;
+    std::cin >> n;
+    
+    int k =0;
+    std::cin >> k;
+    
+    std::vector<long long int> people(n);
+    for (int i=0; i<n; i++)
+        std::cin>>people[i];
+    
+    std::deque<long long int> window;     
+    long long int result =0;
+    
+    
+    for (int i=0; i<n; i++)
+    {
+        
+        while (!window.empty() && window.front() <= i - k)
+        {
+            window.pop_front();
+        }
+       
+        while (!window.empty() && people[window.back()] > people[i])
+        {
+                     window.pop_back();   
+        }
+        
+        window.push_back(i);
+        
+        if (i>= k-1)
+        {
+           result += people[window.front()];       
+        }
+        
+    }
+    
+    std::cout << result;
+    
+    return 0;
+}
