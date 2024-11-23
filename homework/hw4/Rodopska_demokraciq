@@ -1,0 +1,89 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <stack>
+#include <queue>
+using namespace std;
+
+
+int main() {
+    int size =0;
+    std::cin>>size;
+    long long int *people = new long long int[size];
+    for (int i=0; i<size; i++)
+        std::cin>>people[i];
+    
+    std::stack<long long int> pos_st;
+    
+    std::queue<long long int> result;
+    
+    int it=0;
+    while (it<size && people[it]<0)
+    {
+        result.push(people[it]);
+        it++;
+    }
+    
+    while (it<size)
+    {
+        while (people[it]>0 && it<size)
+        {
+            pos_st.push(people[it]);
+            it++;
+        }
+          
+            
+        while (it < size && people[it] < 0) 
+        {
+            long long int neg_person = people[it];
+            
+             while (!pos_st.empty() && pos_st.top() > 0) 
+             {
+                if (pos_st.top() > abs(neg_person)) 
+                {
+                    neg_person = 0;  
+                    break;
+                } 
+                else if (pos_st.top() < abs(neg_person)) 
+                    pos_st.pop();
+                else 
+                {
+                    pos_st.pop();
+                    neg_person = 0;  
+                    break;
+                }
+             }
+            
+            if (neg_person != 0) 
+                result.push(neg_person);
+            
+
+            it++;
+        }    
+        
+    }
+        stack<long long int> remaining;
+         while (!pos_st.empty()) 
+         {
+              remaining.push(pos_st.top());
+             pos_st.pop();
+         }
+         while (!remaining.empty()) 
+         {
+             result.push(remaining.top());
+             remaining.pop();
+         }
+        
+      
+    
+    while (!result.empty())
+    {
+        std::cout<<result.front()<<" ";
+        result.pop();
+    }
+    
+    delete[] people;
+    return 0;
+}
