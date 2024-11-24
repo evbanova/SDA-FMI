@@ -1,0 +1,46 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+    
+//opredelqme state: broi vuzmojni kombinacii za daden element ot masiva times /vreme za spisuk/
+//rekursivnata zavisimost shte izpolzva elementite, koito imat sbor obshtoto vreme
+//nakraq sumirame celiq Dp masiv
+ 
+
+const int TOTAL_TIME = 7*24*60;
+const int LIMIT = 1000000007;
+
+
+
+int main() {
+    int N;
+    std::cin >> N;
+    
+    std::vector<int> times(N, 1);
+    for(int i=0; i<N; i++)
+        std::cin >> times[i];
+   
+    std::vector<long long int> Dp(TOTAL_TIME+1, 0);
+    
+    Dp[0] = 1;
+   
+    for(int i=0; i<N; i++)
+    { 
+        for (int j = TOTAL_TIME; j >=times[i]; j--)
+        {
+            Dp[j] = (Dp[j] + Dp[j - times[i]]) % LIMIT;
+        }
+    }
+    
+    int result = 0;
+    for(int i=0; i<TOTAL_TIME + 1; i++)
+            result = (Dp[i] + result) % LIMIT;
+    
+    std::cout << result;
+    
+    return 0;
+}
