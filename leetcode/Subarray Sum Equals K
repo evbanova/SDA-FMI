@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int totalCount = 0;
+        int currSum = 0;
+
+        unordered_map<int, int> m;
+        //we store index in nums as key and how many times can we achieve the sum til nums[i]
+        m[0] = 1;
+        for (int i=0; i<nums.size(); i++)
+        {
+            currSum += nums[i];
+
+            totalCount += m[currSum - k];
+            m[currSum] += 1;
+
+        }
+        return totalCount;
+    }
+};
