@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void findFriends(vector<int>& levelFriends, int id, int level, vector<vector<int>>& friends)
+    {
+        int currLevel = 0;
+        queue<int> q;
+        q.push(id);
+        vector<bool> visited(friends.size(), false);
+        visited[id] = true;
+
+        while(!q.empty())
+        {
+            if(currLevel == level)
+            {
+                break;
+            }
+            
+            int size = q.size();
+            for (int i=0; i<size; i++)
+            {
+                int c = q.front();
+
+                q.pop();
+                for(int n: friends[c])
+                {
+                    if (!visited[n])
+                    {
+                        q.push(n);
+                        visited[n] = true;
+                    }
+                }
+            }
+            currLevel++;            
+        }
+
+        while(!q.empty())
+        {
+            levelFriends.push_back(q.front());
+            q.pop();
+        }
+    }
+
+    vector<string> watchedVideosByFriends(vector<vector<string>>& watchedVideos, vector<vector<int>>& friends, int id, int level) 
+    {
+        vector<int> levelFriends;
+        findFriends(levelFriends, id, level, friends);
+
+        unordered_map<string, int> m;
+
+        for(int f : levelFriends)
+        {
+            for (string video : watchedVideos[f])
+            {
+                m[video]++;
+            }
+        }
+
+        priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
+
+        for(auto [video, counter] : m)
+        {
+            pq.push({counter, video});
+        }
+
+        vector<string> res;
+        while(!pq.empty())
+        {
+            res.push_back(pq.top().second);
+            pq.pop();
+        }
+
+        return res;
+    }
+};
