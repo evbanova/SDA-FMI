@@ -1,0 +1,56 @@
+class Solution 
+{
+public:
+    stack<int> st;
+
+    bool dfs(vector<vector<int>>& graph, vector<int>& states, int curr)
+    {
+        states[curr] = 1;
+
+        for( int i =0; i<graph[curr].size(); i++)
+        {
+            if(states[graph[curr][i]] == 1)
+                return true;
+            if(states[graph[curr][i]] == 0)
+            {
+                if(dfs(graph, states, graph[curr][i]))
+                    return true;
+            }
+        }
+
+        states[curr] = 2;
+        st.push(curr);
+        return false;
+    }
+
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        vector<vector<int>> graph(numCourses, vector<int>());
+
+        for(auto& p : prerequisites)
+        {
+            graph[p[1]].push_back(p[0]);
+        }
+
+        vector<int> states (numCourses, 0);
+
+        for(int i =0; i<numCourses; i++)
+        {
+            if (states[i] != 2)
+            {
+                if(dfs(graph, states, i))
+                    return {};
+            }
+        }
+
+        vector<int> res;
+
+        while(!st.empty())
+        {
+            res.push_back(st.top());
+            st.pop();
+        }
+
+        return res;
+    }
+};
