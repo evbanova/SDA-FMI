@@ -1,0 +1,43 @@
+class Solution 
+{
+public:
+    bool bfs(vector<vector<int>>& graph, int start, int end)
+    {
+        queue<int> q;
+        q.push(start);
+
+        vector<bool> visited(graph.size(), false);
+
+        while(!q.empty())
+        {
+            int curr = q.front();
+
+            q.pop();
+            if(curr == end)
+                return true;
+
+            visited[curr] = true;
+
+            for(auto& n : graph[curr])
+            {
+                if(!visited[n])
+                    q.push(n);    
+            }    
+        }
+
+        return false;
+    }
+
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) 
+    {
+            vector<vector<int>> graph(n, vector<int>());
+
+            for(auto& edge : edges)
+            {
+                graph[edge[0]].push_back(edge[1]);
+                graph[edge[1]].push_back(edge[0]);
+            }
+
+            return bfs(graph, source, destination);
+    }
+};
