@@ -1,0 +1,19 @@
+class Solution 
+{
+public:
+    int findCenter(vector<vector<int>>& edges) 
+    {
+        unordered_map <int, int> visited;
+
+        for(auto& edge : edges)
+        {
+            if(visited.count(edge[0]) != 0)
+                return edge[0];
+            if(visited.count(edge[1]) != 0)
+                return edge[1];
+            visited[edge[0]]++;  
+            visited[edge[1]]++;  
+        }
+        return -1;
+    }
+};
