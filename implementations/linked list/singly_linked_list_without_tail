@@ -1,0 +1,139 @@
+#include <iostream>
+
+struct ListNode
+{
+    int value = 0;
+    ListNode* next = nullptr;
+
+    void copyFrom(const ListNode& other)
+    {
+        value = other.value;
+        next = other.next;
+    }
+
+    void free()
+    {
+        value = 0;
+        delete next;
+    }
+
+    ListNode() = default;
+    ListNode(int v, ListNode* n) : value(v), next(n) {}
+    ~ListNode() { free(); }
+    ListNode(const ListNode& other) { copyFrom(other); }
+    ListNode& operator= (const ListNode& other)
+    {
+        if (this != &other)
+        {
+            copyFrom(other);
+            free();
+        }
+        return *this;
+    }
+};
+
+
+class LinkedList 
+{
+    ListNode* head;
+
+//qolqma 6ca
+
+    void push_front(int v)
+    {
+        ListNode* n = new ListNode(v, nullptr);
+
+        if (!head)
+            head = n;
+        else
+        {
+            n->next = head;
+            head = n;
+        }
+    }
+
+    void push_back(int v)
+    {
+        ListNode* n = new ListNode(v, nullptr);
+
+        if (!head)
+            head = n;
+
+        else
+        {
+            ListNode* iter = head;
+
+            while (iter)
+            {
+                iter = iter->next;
+            }
+            iter->next = n;
+        }
+    }
+
+    void pop_front()
+    {
+        if (!head)
+            throw std::length_error("List is empty");
+
+        head = head->next;
+    }
+
+    void pop_back()
+    {
+        if (!head)
+            throw std::length_error("List is empty");
+
+        ListNode* iter = head;
+
+        while (iter->next)
+        {
+            iter = iter->next;
+        }
+
+        if (iter == head)
+            head = nullptr;
+
+        iter->next = nullptr;
+    }
+
+    int front()
+    {
+        if (!head)
+            throw std::length_error("List is empty");
+        
+        return head->value;
+    }
+
+    int back()
+    {
+        if (!head)
+            throw std::length_error("List is empty");
+        
+        ListNode* iter = head;
+
+        while (iter)
+        {
+            iter = iter->next;
+        }
+
+        return iter->value;
+    }
+
+    ListNode* reverse()
+    {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+
+        while (curr)
+        {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+};
